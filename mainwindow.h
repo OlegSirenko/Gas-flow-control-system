@@ -16,7 +16,7 @@ public:
 
 private slots:
     void connectToServer();
-    void updatePlot(double time, double voltage);
+    void updatePlot(double time, double temperature);
 
 private:
     QTcpSocket *m_socket;

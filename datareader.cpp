@@ -10,9 +10,16 @@ void DataReader::run()
     while (m_socket->waitForReadyRead()) {
         QByteArray data = m_socket->readAll();
         QJsonDocument doc = QJsonDocument::fromJson(data);
-        QJsonObject obj = doc.object();
-        double time = obj["time"].toDouble();
-        double voltage = obj["Voltage"].toDouble();
-        emit dataReceived(time, voltage);
+        if (!doc.isNull() && doc.isObject()) {
+            QJsonObject obj = doc.object();
+            if (obj.contains("Temperature")) {
+                double time = QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000.0;
+                double temperature = obj["Temperature"].toDouble();
+                emit dataReceived(time, temperature);
+            }
+        }
+        else{
+            qDebug()<<"Something went wrong";
+        }
     }
 }

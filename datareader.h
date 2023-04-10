@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QTcpSocket>
+#include <QDateTime>
 
 class DataReader : public QThread
 {
@@ -12,7 +13,7 @@ public:
     DataReader(QTcpSocket *socket, QObject *parent = nullptr);
 
 signals:
-    void dataReceived(double time, double voltage);
+    void dataReceived(double time, double temperature);
 
 protected:
     void run() override;

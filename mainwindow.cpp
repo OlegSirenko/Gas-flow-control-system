@@ -19,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(connectButton, &QPushButton::clicked,
             this, &MainWindow::connectToServer);
+
+    QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
+    dateTimeTicker->setDateTimeFormat("hh:mm:ss");
+    m_plot->xAxis->setTicker(dateTimeTicker);
+    m_plot->xAxis->setTickLabelRotation(45);
 }
 
 void MainWindow::connectToServer()
@@ -32,18 +37,18 @@ void MainWindow::connectToServer()
     }
 }
 
-void MainWindow::updatePlot(double time, double voltage)
+void MainWindow::updatePlot(double time, double temperature)
 {
     static QCPGraph *graph = nullptr;
     if (!graph) {
         graph = m_plot->addGraph();
         graph->setPen(QPen(Qt::blue));
         m_plot->xAxis->setLabel("Time");
-        m_plot->yAxis->setLabel("Voltage");
+        m_plot->yAxis->setLabel("Temperature");
         m_plot->rescaleAxes();
     }
 
-    graph->addData(time, voltage);
+    graph->addData(time, temperature);
     m_plot->rescaleAxes();
     m_plot->replot();
 }
